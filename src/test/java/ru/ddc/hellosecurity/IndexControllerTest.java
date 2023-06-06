@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
 @TestPropertySource(
@@ -39,5 +40,15 @@ class IndexControllerTest {
                 .get("/")
                 .then()
                 .statusCode(HttpStatus.SC_UNAUTHORIZED);
+    }
+
+    @Test
+    void apiCallWithAuthenticationMustSucceed() {
+        given()
+                .auth().preemptive().basic("user", "pass")
+                .when()
+                .get("/")
+                .then()
+                .statusCode(HttpStatus.SC_OK);
     }
 }
